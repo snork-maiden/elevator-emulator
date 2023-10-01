@@ -14,7 +14,7 @@ const floorElevatorsState = computed(() => {
   const elevators = elevatorsStore.elevators.elevatorsData;
   const elevatorsData = elevators.map((elevator) => {
     const isElevator = calculateIsElevator(elevator.id);
-    let isMoving = isElevator && elevator.goal && elevator.currentFloor !== elevator.goal;
+    let isMoving = isElevator && elevator.goal !== null && elevator.currentFloor !== elevator.goal;
 
     return { id: elevator.id, isElevator, isMoving };
   });

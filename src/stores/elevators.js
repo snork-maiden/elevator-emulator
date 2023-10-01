@@ -45,6 +45,20 @@ export const useElevatorsStore = defineStore('elevator', () => {
     const goal = elevators.value.goalsQueue.shift();
     elevator.goal = goal;
     saveToLocalStorage();
+    moveElevator(elevator.id);
+  }
+
+  function moveElevator(elevatorId) {
+    let intervalID = setInterval(function () {
+
+      changeFloor(elevatorId);
+      const elevator = elevators.value.elevatorsData[elevatorId];
+
+      const floorsDifference = Math.abs(elevator.currentFloor - elevator.goal);
+      if (0 === floorsDifference) {
+        window.clearInterval(intervalID);
+      }
+    }, 1000);
   }
 
   function requestElevator(floor) {
@@ -65,8 +79,7 @@ export const useElevatorsStore = defineStore('elevator', () => {
   function changeFloor(elevatorId) {
     const elevator = elevators.value.elevatorsData[elevatorId];
     if (elevator.goal === null) return;
-    console.log(elevatorId, elevator);
-      (isUp(elevatorId)) ? elevator.currentFloor++ : elevator.currentFloor--;
+    (isUp(elevatorId)) ? elevator.currentFloor++ : elevator.currentFloor--;
     if (elevator.currentFloor === elevator.goal) {
       setTimeout(() => {
         endRide(elevatorId)
@@ -90,5 +103,5 @@ export const useElevatorsStore = defineStore('elevator', () => {
   }
 
 
-  return { elevators, requestElevator, endRide, changeFloor, isDoorsOpen, isUp }
+  return { elevators, requestElevator, isDoorsOpen, isUp }
 })
