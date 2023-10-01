@@ -25,15 +25,21 @@ const movingElevators = computed(() =>
 )
 
 function calculateIsElevator(elevatorId) {
-  // console.log(floorElevatorsState.value)
   const elevator = elevatorsStore.elevators.elevatorsData[elevatorId]
-  console.log(elevator, props.floorNumber)
+  // console.log(elevator, props.floorNumber)
   return elevator.currentFloor === props.floorNumber
 }
 
 watch(movingElevators, (elevators) => {
-  if (elevators.length === 0) return
-  elevators.forEach((elevator) => setTimeout(() => elevatorsStore.changeFloor(elevator.id), 1000))
+  if (elevators.length === 0) return;
+
+  elevators.forEach((elevator) => {
+    // if (!elevator.isMoving) {
+    //   setTimeout(() => elevatorsStore.endRide(elevator.id), 3000)
+    //   return;
+    // }
+    setTimeout(() => elevatorsStore.changeFloor(elevator.id), 1000)
+  })
 })
 </script>
 
@@ -44,7 +50,6 @@ watch(movingElevators, (elevators) => {
       v-for="elevator in elevatorsStore.elevators.elevatorsCount"
       :elevator-id="elevator - 1"
       :is-elevator="floorElevatorsState[elevator - 1].isElevator"
-      :is-moving="floorElevatorsState[elevator - 1].isMoving"
     />
     <label class="button">
       {{ floorNumber }}

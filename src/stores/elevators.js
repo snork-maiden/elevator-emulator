@@ -33,6 +33,7 @@ export const useElevatorsStore = defineStore('elevator', () => {
   }
 
   function requestElevator(floor) {
+    console.log(elevators.value)
     if (elevators.value.goalsQueue.includes(floor)) return;
 
     const ifElevatorOnFloor = !!elevators.value.elevatorsData.find(elevator => elevator.currentFloor === floor)
@@ -49,9 +50,15 @@ export const useElevatorsStore = defineStore('elevator', () => {
 
   function changeFloor(elevatorId) {
     const elevator = elevators.value.elevatorsData[elevatorId];
+    if(elevator.goal === null) return;
     console.log(elevatorId, elevator)
     const ifUp = (elevator.goal - elevator.currentFloor) > 0;
-    return (ifUp) ? elevator.currentFloor++ : elevator.currentFloor--;
+    (ifUp) ? elevator.currentFloor++ : elevator.currentFloor--;
+    if(elevator.currentFloor === elevator.goal) {
+      setTimeout(() => {
+        endRide(elevatorId)
+      }, 3000);
+    }
   }
 
 

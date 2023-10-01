@@ -1,7 +1,7 @@
 <script setup>
 defineProps({
   isElevator: Boolean,
-  IsMoving: Boolean,
+  // IsMoving: Boolean,
   elevatorId: Number
 })
 </script>
