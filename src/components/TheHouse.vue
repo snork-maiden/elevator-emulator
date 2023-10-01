@@ -1,6 +1,6 @@
 <script setup>
-import houseConfig from '../../houseConfig';
-import HouseFloor from './HouseFloor.vue';
+import houseConfig from "../../houseConfig";
+import HouseFloor from "./HouseFloor.vue";
 </script>
 
 <template>

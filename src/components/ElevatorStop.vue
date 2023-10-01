@@ -1,10 +1,10 @@
 <script setup>
-import { useElevatorsStore } from '../stores/elevators';
+import { useElevatorsStore } from "../stores/elevators";
 
 const props = defineProps({
   isElevator: Boolean,
   isMoving: Boolean,
-  elevatorId: Number
+  elevatorId: Number,
 });
 
 const elevatorsStore = useElevatorsStore();
@@ -20,7 +20,7 @@ function isDoorsOpen() {
     <span v-if="isElevator" class="visually-hidden">Elevator is here</span>
     <template v-if="isMoving">
       {{
-        (elevatorsStore.isUp(elevatorId) ? '🔼' : '🔽') +
+        (elevatorsStore.isUp(elevatorId) ? "🔼" : "🔽") +
         elevatorsStore.elevators.elevatorsData[elevatorId].goal
       }}
     </template>

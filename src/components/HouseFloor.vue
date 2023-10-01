@@ -1,13 +1,13 @@
 <script setup>
-import houseConfig from '../../houseConfig';
-import { useElevatorsStore } from '../stores/elevators';
-import ElevatorStop from './ElevatorStop.vue';
-import { computed } from 'vue';
+import houseConfig from "../../houseConfig";
+import { useElevatorsStore } from "../stores/elevators";
+import ElevatorStop from "./ElevatorStop.vue";
+import { computed } from "vue";
 
 const elevatorsStore = useElevatorsStore();
 
 const props = defineProps({
-  floorNumber: Number
+  floorNumber: Number,
 });
 
 const floorElevatorsState = computed(() => {
@@ -16,7 +16,8 @@ const floorElevatorsState = computed(() => {
     const isElevator = calculateIsElevator(elevator.id);
     let isMoving = false;
     if (isElevator) {
-      isMoving = elevator.goal !== null && elevator.currentFloor !== elevator.goal;
+      isMoving =
+        elevator.goal !== null && elevator.currentFloor !== elevator.goal;
     }
 
     return { id: elevator.id, isElevator, isMoving };
@@ -31,9 +32,12 @@ function calculateIsElevator(elevatorId) {
 
 const isWaiting = computed(() => {
   const elevatorsRunning = elevatorsStore.elevators.elevatorsData.find(
-    (elevator) => elevator.goal === props.floorNumber
+    (elevator) => elevator.goal === props.floorNumber,
   );
-  return elevatorsStore.elevators.goalsQueue.includes(props.floorNumber) || elevatorsRunning;
+  return (
+    elevatorsStore.elevators.goalsQueue.includes(props.floorNumber) ||
+    elevatorsRunning
+  );
 });
 </script>
 
@@ -50,7 +54,7 @@ const isWaiting = computed(() => {
     <button
       class="button"
       :class="{
-        isWaiting
+        isWaiting,
       }"
       type="button"
       @click="elevatorsStore.requestElevator(floorNumber)"
