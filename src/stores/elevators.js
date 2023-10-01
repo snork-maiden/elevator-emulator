@@ -32,8 +32,6 @@ export const useElevatorsStore = defineStore('elevator', () => {
     elevator.goal = goal;
   }
 
-
-
   function requestElevator(floor) {
     if (elevators.value.goalsQueue.includes(floor)) return;
 
@@ -42,8 +40,6 @@ export const useElevatorsStore = defineStore('elevator', () => {
 
     elevators.value.goalsQueue.push(floor);
     arrangeRide()
-
-
   }
 
   function endRide(elevatorId) {
@@ -53,9 +49,11 @@ export const useElevatorsStore = defineStore('elevator', () => {
 
   function changeFloor(elevatorId) {
     const elevator = elevators.value.elevatorsData[elevatorId];
+    console.log(elevatorId, elevator)
     const ifUp = (elevator.goal - elevator.currentFloor) > 0;
     return (ifUp) ? elevator.currentFloor++ : elevator.currentFloor--;
   }
+
 
   return { elevators, requestElevator, endRide, changeFloor }
 })

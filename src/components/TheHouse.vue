@@ -1,14 +1,23 @@
 <script setup>
-import HouseFloor from './HouseFloor.vue';
-
-let floorsNumber = 5;
+import { useElevatorsStore } from '../stores/elevators'
+import HouseFloor from './HouseFloor.vue'
+const elevatorsStore = useElevatorsStore()
 </script>
 
 <template>
-<HouseFloor class="houses" :floorNumber="floor" v-bind:key="floor" v-for="floor in floorsNumber"/>
+  <div class="wrapper">
+
+    <HouseFloor
+      class="elevators"
+      :floorNumber="floor"
+      v-bind:key="floor"
+      v-for="floor in elevatorsStore.elevators.floorsNumber"
+    />
+  </div>
 </template>
 <style scoped>
-.houses {
+.wrapper {
   display: flex;
+  flex-direction: column-reverse;
 }
 </style>
