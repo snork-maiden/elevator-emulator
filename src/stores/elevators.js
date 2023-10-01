@@ -4,13 +4,15 @@ import { defineStore } from 'pinia'
 export const useElevatorsStore = defineStore('elevator', () => {
   const elevators = ref({
     floorsNumber: 5,
-    elevatorsCount: 1,
+    elevatorsCount: 3,
     goalsQueue: [],
-    elevatorsData: [{
-      id: 0,
-      currentFloor: 1,
-      goal: null,
-    }]
+    elevatorsData: [
+      {
+        id: 0,
+        currentFloor: 1,
+        goal: null,
+      },
+    ]
   })
   function bestOptionElevator() {
     const goal = elevators.value.goalsQueue[0];
@@ -50,17 +52,22 @@ export const useElevatorsStore = defineStore('elevator', () => {
 
   function changeFloor(elevatorId) {
     const elevator = elevators.value.elevatorsData[elevatorId];
-    if(elevator.goal === null) return;
+    if (elevator.goal === null) return;
     console.log(elevatorId, elevator)
     const ifUp = (elevator.goal - elevator.currentFloor) > 0;
     (ifUp) ? elevator.currentFloor++ : elevator.currentFloor--;
-    if(elevator.currentFloor === elevator.goal) {
+    if (elevator.currentFloor === elevator.goal) {
       setTimeout(() => {
         endRide(elevatorId)
       }, 3000);
     }
   }
 
+  function doorsOpen(elevatorId) {
+    const elevator = elevators.value.elevatorsData[elevatorId];
+    return elevator.currentFloor === elevator.goal;
+  }
 
-  return { elevators, requestElevator, endRide, changeFloor }
+
+  return { elevators, requestElevator, endRide, changeFloor, doorsOpen }
 })
