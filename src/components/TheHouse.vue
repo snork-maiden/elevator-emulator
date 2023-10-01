@@ -1,7 +1,6 @@
 <script setup>
-import { useElevatorsStore } from '../stores/elevators'
+import houseConfig from '../../houseConfig';
 import HouseFloor from './HouseFloor.vue'
-const elevatorsStore = useElevatorsStore()
 </script>
 
 <template>
@@ -11,7 +10,7 @@ const elevatorsStore = useElevatorsStore()
       class="elevators"
       :floorNumber="floor"
       v-bind:key="floor"
-      v-for="floor in elevatorsStore.elevators.floorsNumber"
+      v-for="floor in houseConfig.floorsNumber"
     />
   </div>
 </template>

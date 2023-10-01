@@ -1,4 +1,5 @@
 <script setup>
+import houseConfig from '../../houseConfig';
 import { useElevatorsStore } from '../stores/elevators'
 import ElevatorStop from './ElevatorStop.vue'
 import { computed, watch } from 'vue'
@@ -13,7 +14,7 @@ const floorElevatorsState = computed(() => {
   const elevators = elevatorsStore.elevators.elevatorsData
   const elevatorsData = elevators.map((elevator) => {
     const isElevator = calculateIsElevator(elevator.id)
-    let isMoving = isElevator && elevator.currentFloor !== elevator.goal
+    let isMoving = isElevator && elevator.goal && elevator.currentFloor !== elevator.goal;
 
     return { id: elevator.id, isElevator, isMoving }
   })
@@ -42,7 +43,7 @@ watch(movingElevators, (elevators) => {
   <div class="floor">
     <ElevatorStop
       v-bind:key="elevator"
-      v-for="elevator in elevatorsStore.elevators.elevatorsCount"
+      v-for="elevator in houseConfig.elevatorsCount"
       :elevator-id="elevator - 1"
       :is-elevator="floorElevatorsState[elevator - 1].isElevator"
       :is-moving="floorElevatorsState[elevator - 1].isMoving"

@@ -1,10 +1,10 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 
+const STORE_NAME = 'elevatorsData';
 export const useElevatorsStore = defineStore('elevator', () => {
   const elevators = ref({
-    floorsNumber: 5,
-    elevatorsCount: 3,
+
     goalsQueue: [],
     elevatorsData: [
       {
@@ -12,7 +12,19 @@ export const useElevatorsStore = defineStore('elevator', () => {
         currentFloor: 1,
         goal: null,
       },
+
+      {
+        id: 1,
+        currentFloor: 1,
+        goal: null,
+      },
+      {
+        id: 2,
+        currentFloor: 1,
+        goal: null,
+      },
     ]
+
   })
   function bestOptionElevator() {
     const goal = elevators.value.goalsQueue[0];
@@ -32,10 +44,10 @@ export const useElevatorsStore = defineStore('elevator', () => {
     const elevator = elevators.value.elevatorsData[bestOptionElevator().id];
     const goal = elevators.value.goalsQueue.shift();
     elevator.goal = goal;
+    saveToLocalStorage();
   }
 
   function requestElevator(floor) {
-    console.log(elevators.value)
     if (elevators.value.goalsQueue.includes(floor)) return;
 
     const ifElevatorOnFloor = !!elevators.value.elevatorsData.find(elevator => elevator.currentFloor === floor)
@@ -53,21 +65,30 @@ export const useElevatorsStore = defineStore('elevator', () => {
   function changeFloor(elevatorId) {
     const elevator = elevators.value.elevatorsData[elevatorId];
     if (elevator.goal === null) return;
-    console.log(elevatorId, elevator)
-    const ifUp = (elevator.goal - elevator.currentFloor) > 0;
-    (ifUp) ? elevator.currentFloor++ : elevator.currentFloor--;
+    console.log(elevatorId, elevator);
+      (isUp(elevatorId)) ? elevator.currentFloor++ : elevator.currentFloor--;
     if (elevator.currentFloor === elevator.goal) {
       setTimeout(() => {
         endRide(elevatorId)
       }, 3000);
     }
+    saveToLocalStorage()
   }
 
-  function doorsOpen(elevatorId) {
+  function isUp(elevatorId) {
+    const elevator = elevators.value.elevatorsData[elevatorId];
+    return (elevator.goal - elevator.currentFloor) > 0;
+  }
+
+  function isDoorsOpen(elevatorId) {
     const elevator = elevators.value.elevatorsData[elevatorId];
     return elevator.currentFloor === elevator.goal;
   }
 
+  function saveToLocalStorage() {
+    localStorage.setItem(STORE_NAME, JSON.stringify(elevators.value))
+  }
 
-  return { elevators, requestElevator, endRide, changeFloor, doorsOpen }
+
+  return { elevators, requestElevator, endRide, changeFloor, isDoorsOpen, isUp }
 })
