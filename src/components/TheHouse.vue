@@ -1,11 +1,10 @@
 <script setup>
 import houseConfig from '../../houseConfig';
-import HouseFloor from './HouseFloor.vue'
+import HouseFloor from './HouseFloor.vue';
 </script>
 
 <template>
   <div class="wrapper">
-
     <HouseFloor
       class="elevators"
       :floorNumber="floor"

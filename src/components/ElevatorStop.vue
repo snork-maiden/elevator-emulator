@@ -1,17 +1,17 @@
 <script setup>
-import { useElevatorsStore } from '../stores/elevators'
+import { useElevatorsStore } from '../stores/elevators';
 
 const props = defineProps({
   isElevator: Boolean,
   isMoving: Boolean,
   elevatorId: Number
-})
+});
 
-const elevatorsStore = useElevatorsStore()
+const elevatorsStore = useElevatorsStore();
 
 function isDoorsOpen() {
-  if (props.isMoving || !props.isElevator) return false
-  return elevatorsStore?.isDoorsOpen(props.elevatorId)
+  if (props.isMoving || !props.isElevator) return false;
+  return elevatorsStore?.isDoorsOpen(props.elevatorId);
 }
 </script>
 
@@ -19,7 +19,10 @@ function isDoorsOpen() {
   <div class="stop" :class="{ isElevator, openDoors: isDoorsOpen() }">
     <span v-if="isElevator" class="visually-hidden">Elevator is here</span>
     <template v-if="isMoving">
-      {{ (elevatorsStore.isUp(elevatorId) ? '🔼' : '🔽') + elevatorsStore.elevators.elevatorsData[elevatorId].goal }}
+      {{
+        (elevatorsStore.isUp(elevatorId) ? '🔼' : '🔽') +
+        elevatorsStore.elevators.elevatorsData[elevatorId].goal
+      }}
     </template>
   </div>
 </template>
@@ -39,8 +42,8 @@ function isDoorsOpen() {
   overflow: hidden;
 }
 .stop {
-  width: 128px;
-  height: 128px;
+  width: min(100px, 15vw);
+  height: min(128px, 20vw);
   outline: 1px solid salmon;
   display: flex;
   align-items: center;
