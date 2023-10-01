@@ -14,7 +14,10 @@ const floorElevatorsState = computed(() => {
   const elevators = elevatorsStore.elevators.elevatorsData;
   const elevatorsData = elevators.map((elevator) => {
     const isElevator = calculateIsElevator(elevator.id);
-    let isMoving = isElevator && elevator.goal !== null && elevator.currentFloor !== elevator.goal;
+    let isMoving = false;
+    if (isElevator) {
+      isMoving = elevator.goal !== null && elevator.currentFloor !== elevator.goal;
+    }
 
     return { id: elevator.id, isElevator, isMoving };
   });
@@ -25,6 +28,13 @@ function calculateIsElevator(elevatorId) {
   const elevator = elevatorsStore.elevators.elevatorsData[elevatorId];
   return elevator.currentFloor === props.floorNumber;
 }
+
+const isWaiting = computed(() => {
+  const elevatorsRunning = elevatorsStore.elevators.elevatorsData.find(
+    (elevator) => elevator.goal === props.floorNumber
+  );
+  return elevatorsStore.elevators.goalsQueue.includes(props.floorNumber) || elevatorsRunning;
+});
 </script>
 
 <template>
@@ -37,7 +47,14 @@ function calculateIsElevator(elevatorId) {
       :is-moving="floorElevatorsState[elevator - 1].isMoving"
     />
 
-    <button class="button" type="button" @click="elevatorsStore.requestElevator(floorNumber)">
+    <button
+      class="button"
+      :class="{
+        isWaiting
+      }"
+      type="button"
+      @click="elevatorsStore.requestElevator(floorNumber)"
+    >
       {{ floorNumber }}
     </button>
   </div>
@@ -63,13 +80,7 @@ function calculateIsElevator(elevatorId) {
   width: clamp(25px, 4vw, 35px);
 }
 
-.wrong-call {
-  animation: error-animation 5s reverse;
-}
-
-@keyframes error-animation {
-  to {
-    background-color: salmon;
-  }
+.isWaiting {
+  background-color: salmon;
 }
 </style>

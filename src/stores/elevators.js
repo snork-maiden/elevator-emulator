@@ -64,7 +64,10 @@ export const useElevatorsStore = defineStore('elevator', () => {
   function requestElevator(floor) {
     if (elevators.value.goalsQueue.includes(floor)) return;
 
-    const ifElevatorOnFloor = !!elevators.value.elevatorsData.find(elevator => elevator.currentFloor === floor)
+    const ifElevatorOnFloor = !!elevators.value.elevatorsData.find(elevator => {
+      if (elevator.currentFloor !== floor) return false;
+      return elevator.currentFloor === elevator.goal || elevator.goal === null
+    })
     if (ifElevatorOnFloor) return;
 
     elevators.value.goalsQueue.push(floor);
