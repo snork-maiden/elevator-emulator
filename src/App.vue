@@ -1,5 +1,13 @@
 <script setup>
-import TheHouse from './components/TheHouse.vue'
+import TheHouse from "./components/TheHouse.vue";
+import { onMounted } from "vue";
+import { useElevatorsStore } from "./stores/elevators";
+
+const elevatorsStore = useElevatorsStore();
+
+onMounted(() => {
+  elevatorsStore.continueMoving();
+});
 </script>
 
 <template>

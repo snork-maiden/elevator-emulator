@@ -1,31 +1,38 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
+import houseConfig from "../../houseConfig";
+import { useLocalStorage } from "@vueuse/core";
 
 const STORE_NAME = 'elevatorsData';
 export const useElevatorsStore = defineStore('elevator', () => {
-  const elevators = ref({
-
+  const elevators = ref(useLocalStorage(STORE_NAME, {
     goalsQueue: [],
-    elevatorsData: [
-      {
-        id: 0,
-        currentFloor: 1,
-        goal: null,
-      },
+    elevatorsData: setupElevators()
+  }))
 
-      {
-        id: 1,
+  function setupElevators() {
+    let elevators = [];
+    for (let i = 0; i < houseConfig.elevatorsCount; i++) {
+      elevators.push({
+        id: i,
         currentFloor: 1,
         goal: null,
-      },
-      {
-        id: 2,
-        currentFloor: 1,
-        goal: null,
-      },
-    ]
+      })
+    }
+    return elevators;
+  }
 
-  })
+  function continueMoving() {
+    elevators.value.elevatorsData.forEach((elevator) => {
+      if (elevator.goal === null) return;
+      if (elevator.goal === elevator.currentFloor) {
+        elevator.goal = null;
+      } else {
+        moveElevator(elevator.id);
+      }
+    })
+  }
+
   function bestOptionElevator() {
     const goal = elevators.value.goalsQueue[0];
     if (!goal) return null;
@@ -44,7 +51,6 @@ export const useElevatorsStore = defineStore('elevator', () => {
     const elevator = elevators.value.elevatorsData[bestOptionElevator().id];
     const goal = elevators.value.goalsQueue.shift();
     elevator.goal = goal;
-    saveToLocalStorage();
     moveElevator(elevator.id);
   }
 
@@ -88,7 +94,6 @@ export const useElevatorsStore = defineStore('elevator', () => {
         endRide(elevatorId)
       }, 3000);
     }
-    saveToLocalStorage()
   }
 
   function isUp(elevatorId) {
@@ -101,10 +106,5 @@ export const useElevatorsStore = defineStore('elevator', () => {
     return elevator.currentFloor === elevator.goal;
   }
 
-  function saveToLocalStorage() {
-    localStorage.setItem(STORE_NAME, JSON.stringify(elevators.value))
-  }
-
-
-  return { elevators, requestElevator, isDoorsOpen, isUp }
+  return { elevators, requestElevator, isDoorsOpen, isUp, continueMoving }
 })
